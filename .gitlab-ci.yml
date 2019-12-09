@@ -1,0 +1,30 @@
+stages:
+    - build
+    - cleanup
+
+build-storage-provisioner:
+   stage: build
+   only:
+    - add-gitlab-build
+   before_script:
+     - export COMMIT=${CI_COMMIT_SHORT_SHA}
+     - export GOPATH=$HOME/go
+     - export PATH=$HOME/go/bin:$PATH
+     - mkdir -p $HOME/go/src/github.com/mayadata-io/storage-provisioner
+     - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/ #CI_PROJECT_DIR is full path where project is cloned
+     - cd ${HOME}/go/src/github.com/mayadata-io/storage-provisioner
+   script: 
+    - echo "Building storage-provisioner"
+    - echo $COMMIT
+    - sudo docker build -t ${DOCKER_HUB_REPO}/storage-provisioner:$COMMIT .
+    - sudo docker push ${DOCKER_HUB_REPO}/storage-provisioner:$COMMIT
+
+cleanup:
+  when: always
+  stage: cleanup
+  only:
+    - add-gitlab-build
+  script:
+     - sudo rm -r ~/go
+     - sudo docker images 
+     - sudo docker image prune -a --force
