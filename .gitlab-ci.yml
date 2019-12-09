@@ -12,6 +12,7 @@ build-storage-provisioner:
      - mkdir -p $HOME/go/src/github.com/mayadata-io/storage-provisioner
      - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/ #CI_PROJECT_DIR is full path where project is cloned
      - cd ${HOME}/go/src/github.com/mayadata-io/storage-provisioner
+     - git checkout add-gitlab-build
      - export COMMIT=${CI_COMMIT_SHORT_SHA}
    script: 
     - echo "Building storage-provisioner"
