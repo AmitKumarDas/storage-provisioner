@@ -10,10 +10,10 @@ build-storage-provisioner:
    before_script:
      - export GOPATH=$HOME/go
      - export PATH=$HOME/go/bin:$PATH
-     - mkdir -p $HOME/go/src/github.com/mayadata-io/storage-provisioner
-     - apt install rsync grsync -y
-     - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/ #CI_PROJECT_DIR is full path where project is cloned
-     - cd ${HOME}/go/src/github.com/mayadata-io/storage-provisioner
+     - mkdir -p $HOME/go/src/github.com/mayadata-io
+     - cd $HOME/go/src/github.com/mayadata-io/
+     - git clone https://${USERNAME}:${PASSWORD}@github.com/mayadata-io/storage-provisioner.git
+     - cd storage-provisioner
      - git checkout add-gitlab-build
      - export COMMIT=${CI_COMMIT_SHORT_SHA}
    script: 
@@ -28,6 +28,7 @@ cleanup:
   only:
     - add-gitlab-build
   script:
+     - rm -rf $HOME/go/src/github.com/mayadata-io/
      - sudo rm -r ~/go
      - sudo docker images 
      - sudo docker image prune -a --force
