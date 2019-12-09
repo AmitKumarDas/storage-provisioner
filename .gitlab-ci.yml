@@ -7,12 +7,12 @@ build-storage-provisioner:
    only:
     - add-gitlab-build
    before_script:
-     - export COMMIT=${CI_COMMIT_SHORT_SHA}
      - export GOPATH=$HOME/go
      - export PATH=$HOME/go/bin:$PATH
      - mkdir -p $HOME/go/src/github.com/mayadata-io/storage-provisioner
      - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/ #CI_PROJECT_DIR is full path where project is cloned
      - cd ${HOME}/go/src/github.com/mayadata-io/storage-provisioner
+     - export COMMIT=${CI_COMMIT_SHORT_SHA}
    script: 
     - echo "Building storage-provisioner"
     - echo $COMMIT
