@@ -10,7 +10,7 @@ build-storage-provisioner:
      - export GOPATH=$HOME/go
      - export PATH=$HOME/go/bin:$PATH
      - mkdir -p $HOME/go/src/github.com/mayadata-io/storage-provisioner
-     - sudo apt install rsync grsync
+     - sudo apt install rsync grsync -y
      - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/ #CI_PROJECT_DIR is full path where project is cloned
      - cd ${HOME}/go/src/github.com/mayadata-io/storage-provisioner
      - git checkout add-gitlab-build
