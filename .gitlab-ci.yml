@@ -3,7 +3,6 @@ stages:
     - cleanup
 
 build-storage-provisioner:
-   image: harshshekhar15/gitlab-runner:v4
    stage: build
    only:
     - add-gitlab-build
