@@ -3,22 +3,20 @@ stages:
     - cleanup
 
 build-storage-provisioner:
-   image: harshshekhar15/gitlab-runner:v4
    stage: build
    only:
     - add-gitlab-build
    before_script:
-     - export COMMIT=${CI_COMMIT_SHORT_SHA}
-     - export GOPATH=$HOME/go
-     - export PATH=$HOME/go/bin:$PATH
      - mkdir -p $HOME/go/src/github.com/mayadata-io/storage-provisioner
      - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/ 
      - cd ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/
+     - export COMMIT=${CI_COMMIT_SHORT_SHA}
+     - export BRANCH=${CI_COMMIT_REF_NAME}
    script: 
     - echo "Building storage-provisioner"
     - echo $COMMIT
     - docker build -t ${DOCKER_HUB_REPO}/storage-provisioner:$COMMIT .
-    - docker push ${DOCKER_HUB_REPO}/storage-provisioner:$COMMIT
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" && docker push ${DOCKER_HUB_REPO}/storage-provisioner:$COMMIT
 
 cleanup:
   when: always
@@ -26,6 +24,6 @@ cleanup:
   only:
     - add-gitlab-build
   script:
-     - rm -rf $HOME/go/src/github.com/mayadata-io/
+     - rm -rf $HOME/go/src/github.com/
      - docker images
      - docker image prune -a --force
