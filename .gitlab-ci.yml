@@ -8,19 +8,17 @@ build-storage-provisioner:
    only:
     - add-gitlab-build
    before_script:
+     - export COMMIT=${CI_COMMIT_SHORT_SHA}
      - export GOPATH=$HOME/go
      - export PATH=$HOME/go/bin:$PATH
-     - mkdir -p $HOME/go/src/github.com/mayadata-io
-     - cd $HOME/go/src/github.com/mayadata-io/
-     - git clone https://${USERNAME}:${PASSWORD}@github.com/mayadata-io/storage-provisioner.git
-     - cd storage-provisioner
-     - git checkout add-gitlab-build
-     - export COMMIT=${CI_COMMIT_SHORT_SHA}
+     - mkdir -p $HOME/go/src/github.com/mayadata-io/storage-provisioner
+     - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/ 
+     - cd ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/
    script: 
     - echo "Building storage-provisioner"
     - echo $COMMIT
-    - sudo docker build -t ${DOCKER_HUB_REPO}/storage-provisioner:$COMMIT .
-    - sudo docker push ${DOCKER_HUB_REPO}/storage-provisioner:$COMMIT
+    - docker build -t ${DOCKER_HUB_REPO}/storage-provisioner:$COMMIT .
+    - docker push ${DOCKER_HUB_REPO}/storage-provisioner:$COMMIT
 
 cleanup:
   when: always
@@ -29,6 +27,5 @@ cleanup:
     - add-gitlab-build
   script:
      - rm -rf $HOME/go/src/github.com/mayadata-io/
-     - sudo rm -r ~/go
-     - sudo docker images 
-     - sudo docker image prune -a --force
+     - docker images
+     - docker image prune -a --force
