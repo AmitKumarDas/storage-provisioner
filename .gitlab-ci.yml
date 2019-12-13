@@ -8,7 +8,7 @@ build-storage-provisioner:
     - add-gitlab-build
    before_script:
      - mkdir -p $HOME/go/src/github.com/mayadata-io/storage-provisioner
-     - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/ 
+     - cp -rf ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/ 
      - cd ${HOME}/go/src/github.com/mayadata-io/storage-provisioner/
      - export COMMIT=${CI_COMMIT_SHORT_SHA}
      - export BRANCH=${CI_COMMIT_REF_NAME}
