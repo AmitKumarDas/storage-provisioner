@@ -8,7 +8,7 @@ build-storage-provisioner:
    only:
     - add-gitlab-build
    before_script:
-     - export COMMIT=${CI_COMMIT_SHORT_SHA}
+     - export COMMIT=$($CI_COMMIT_SHORT_SHA)
      - export GOPATH=$HOME/go
      - export PATH=$HOME/go/bin:$PATH
      - mkdir -p $HOME/go/src/github.com/mayadata-io/storage-provisioner
